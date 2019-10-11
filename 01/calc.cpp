@@ -1,6 +1,8 @@
 #include <iostream>
-#define ERR 1
+#include <stdexcept>
 using std::cout;
+using std::string;
+using std::invalid_argument;
 // __LINE__
 /* recursive descent grammar
  * X->B[+|-B]
@@ -8,7 +10,7 @@ using std::cout;
  * C->-T|T
  * T->0-9
 */
-char gc(char *&str)
+char get_char(const char *&str)
 {
     while (*++str == ' ') {}
     if (*str != '\0') {
@@ -17,90 +19,97 @@ char gc(char *&str)
         return '\0';
     }
 }
-int num_f(char *& str) // T
+int get_number(const char *& str) // T
 {
     int arg = 0;
     if ((*str >= '9') || (*str <= '0')) {
-        throw *str;
+        string err("error on character ");
+        throw invalid_argument(err + *str);
     }
     while((*str <= '9') && (*str >= '0')) {
         arg = arg * 10 + (*str - '0');
-        gc(str);
+        get_char(str);
     }
     if ((*str != '+') && (*str != '\0') && (*str != '-') &&\
             (*str != '*') && (*str != '/')) {
-        throw *str;
+        string err("error on character ");
+        throw invalid_argument(err + *str);
     }
     return arg;
 }
-int sign_f(char *& str) // C
+int get_sign(const char *& str) // C
 {
     if (*str == '-') {
-        gc(str);
-        int arg = num_f(str);
+        get_char(str);
+        int arg = get_number(str);
         return -arg;
     }
     else {
-        return num_f(str);
+        return get_number(str);
     }
 }
-int mult_f(char *& str) // B
+int get_multiply(const char *& str) // B
 {
-    int arg = sign_f(str);
+    int arg = get_sign(str);
     if ((*str != '+') && (*str != '\0') && (*str != '-') &&\
             (*str != '*') && (*str != '/')) {
-        throw *str;
+        string err("error on character ");
+        throw invalid_argument(err + *str);
     }
     while (*str == '*' || *str == '/') {
         if (*str == '*') {
-            gc(str);
-            arg *= sign_f(str);
+            get_char(str);
+            arg *= get_sign(str);
         } else if (*str == '/') {
-            gc(str);
-            int arg2 = sign_f(str);
+            get_char(str);
+            int arg2 = get_sign(str);
             if (arg2 != 0) {
                 arg /= arg2;
             } else {
-                throw '0';
+                string err("error on character ");
+                throw invalid_argument(err + *str);
             }
         }
     }
     return arg;
 }
-int sum_f(char *& str) // X
+int calc(const char *& str) // X
 {
-    int arg = mult_f(str);
+    int arg = get_multiply(str);
     if ((*str != '+') && (*str != '\0') && (*str != '-')) {
-        throw *str;
+        string err("error on character ");
+        throw invalid_argument(err + *str);
     }
     while (*str == '+' || *str == '-') {
         if (*str == '+') {
-            gc(str);
-            arg += mult_f(str);
+            get_char(str);
+            arg += get_multiply(str);
         } else if (*str == '-') {
-            gc(str);
-            arg -= mult_f(str);
+            get_char(str);
+            arg -= get_multiply(str);
         }
     }
     if (*str != '\0') {
-        throw *str;
+        string err("error on character ");
+        throw invalid_argument(err + *str);
     }
     return arg;
 }
 int main(int argc, char **argv)
 {
+    const int err = 1;
     if (argc != 2) {
         cout << "wrong number of parameters" << std::endl;
-        return ERR;
+        return err;
     }
     // string for parsing in argv[1]
-    char *str = argv[1];
+    const char *str = argv[1];
     try {
-        int res = sum_f(str);
+        int res = calc(str);
         cout << res << std::endl;
         return 0;
-    } catch (char c) {
-        cout << "error on character " << c << std::endl;
-        return ERR;
+    } catch (std::exception& e) {
+        cout << e.what() << std::endl;
+        return err;
     }
 }
