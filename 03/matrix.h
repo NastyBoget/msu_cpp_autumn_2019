@@ -7,8 +7,8 @@ class Matrix
 {
 public:
     Matrix(size_t rows, size_t columns);
-    size_t getRows();
-    size_t getColumns();
+    size_t getRows() const;
+    size_t getColumns() const;
     bool operator==(const Matrix& other) const;
     bool operator!=(const Matrix& other) const;
     const Matrix& operator*=(int arg);
@@ -20,7 +20,7 @@ public:
             columns = m.columns;
             data = m.data + i * columns;
         }
-        int& operator[](size_t j) const
+        int& operator[](size_t j)
         {
             if (j >= columns) {
                 throw std::out_of_range("");
@@ -31,7 +31,7 @@ public:
         size_t columns;
         int *data;
     };
-    proxy operator[](size_t i) const;
+    proxy operator[](size_t i);
 private:
     size_t rows;
     size_t columns;

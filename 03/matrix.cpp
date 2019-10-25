@@ -19,12 +19,12 @@ bool Matrix::operator!=(const Matrix &other) const
     return !(*this == other);
 }
 
-size_t Matrix::getRows()
+size_t Matrix::getRows() const
 {
     return rows;
 }
 
-size_t Matrix::getColumns()
+size_t Matrix::getColumns() const
 {
     return columns;
 }
@@ -33,10 +33,7 @@ Matrix::Matrix(size_t rows, size_t columns)
 {
     this->rows = rows;
     this->columns = columns;
-    data = new int[rows * columns];
-    for (size_t i = 0; i < rows * columns; ++i) {
-        data[i] = 0;
-    }
+    data = new int[rows * columns]();
 }
 
 Matrix::~Matrix()
@@ -51,7 +48,7 @@ const Matrix &Matrix::operator*=(int arg)
     return *this;
 }
 
-Matrix::proxy Matrix::operator[](size_t i) const {
+Matrix::proxy Matrix::operator[](size_t i) {
     if (i >= rows) {
         throw std::out_of_range("");
     }
