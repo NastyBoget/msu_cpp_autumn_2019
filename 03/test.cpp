@@ -17,6 +17,9 @@ int main() {
     Matrix m2(rows, cols);
     assert(m1 != m);
     assert(m1 == m2);
+    const Matrix m3(rows, cols);
+    x = m3[1][1];
+	//m3[0][0] = 9;
     std::cout << "done" << std::endl;
     return 0;
 }

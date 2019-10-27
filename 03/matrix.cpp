@@ -41,11 +41,18 @@ Matrix::~Matrix()
     delete[] data;
 }
 
-const Matrix &Matrix::operator*=(int arg)
+Matrix &Matrix::operator*=(int arg)
 {
     for (size_t i = 0; i < rows * columns; ++i)
         data[i] *= arg;
     return *this;
+}
+
+const Matrix::proxy Matrix::operator[](size_t i) const {
+    if (i >= rows) {
+        throw std::out_of_range("");
+    }
+    return proxy(*this, i);
 }
 
 Matrix::proxy Matrix::operator[](size_t i) {

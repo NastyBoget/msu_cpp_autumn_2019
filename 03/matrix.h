@@ -11,7 +11,7 @@ public:
     size_t getColumns() const;
     bool operator==(const Matrix& other) const;
     bool operator!=(const Matrix& other) const;
-    const Matrix& operator*=(int arg);
+    Matrix& operator*=(int arg);
     ~Matrix();
     class proxy {
     public:
@@ -19,6 +19,13 @@ public:
         {
             columns = m.columns;
             data = m.data + i * columns;
+        }
+        const int& operator[](size_t j) const
+        {
+            if (j >= columns) {
+                throw std::out_of_range("");
+            }
+            return data[j];
         }
         int& operator[](size_t j)
         {
@@ -31,6 +38,7 @@ public:
         size_t columns;
         int *data;
     };
+    const proxy operator[](size_t i) const;
     proxy operator[](size_t i);
 private:
     size_t rows;
