@@ -31,7 +31,7 @@ public:
         return num;
     }
     template<typename T>
-    void add_args(T arg)
+    void add_args(T&& arg)
     {
         ++cnt_args;
         this->arg << arg; // проверяем, можно ли записать в поток
@@ -39,13 +39,13 @@ public:
         this->arg.str(string()); // очищаем поток
     }
     template<typename T, typename... Args>
-    void add_args(T arg, Args... args)
+    void add_args(T&& arg, Args&&... args)
     {
         ++cnt_args;
         this->arg << arg;
         this->args.push_back(this->arg.str());
         this->arg.str(string());
-        add_args(args...);
+        add_args(std::forward<Args>(args)...);
     }
     string get_res()
     {
