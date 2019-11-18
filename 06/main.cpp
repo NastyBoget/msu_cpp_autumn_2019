@@ -69,10 +69,10 @@ public:
 };
 
 template<typename... Args>
-string format(const char *str, Args... args)
+string format(const char *str, Args&&... args)
 {
     Format f(str);
-    f.add_args(args...);
+    f.add_args(std::forward<Args>(args)...);
     return f.get_res();
 }
 
