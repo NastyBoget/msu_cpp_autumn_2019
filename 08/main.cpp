@@ -9,6 +9,7 @@ int foo(int x) {
 struct A
 {
     int data;
+    A() : data(0) {}
 };
 
 struct B
@@ -28,8 +29,7 @@ int bar(const A& a) {
 }
 
 int main() {
-
-    ThreadPool pool(6);
+    ThreadPool pool(5);
     A a;
     auto task0 = pool.exec(bar, a);
     assert(task0.get() == 0);
