@@ -1,6 +1,8 @@
 # msu_cpp_autumn_2019
 
-## homeworks
+## Лекции по c++ 2019
+
+### homeworks
 
 00. Sum by columns / sum by rows
 
