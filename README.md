@@ -2,6 +2,8 @@
 
 ## Лекции по c++ 2019
 
+[Видеолекции](https://www.youtube.com/watch?v=YXbrMny86U0&list=PLrCZzMib1e9qjGLjg83bCksf3N7FIy7jg)
+
 ### homeworks
 
 00. Sum by columns / sum by rows
